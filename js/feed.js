@@ -2,6 +2,7 @@
 
 import * as crypto from './crypto.js';
 
+
 export async function fetchProfile(domain) {
   const resp = await fetch(`https://${domain}/.well-known/satproto.json`);
   if (!resp.ok) throw new Error(`Profile not found for ${domain}`);
