@@ -1,18 +1,22 @@
 // Fetch and aggregate feeds from other users' sites
 
-import * as crypto from './crypto.js';
+import * as crypto from "./crypto.js";
 
-const DEFAULT_BASE = 'satellite';
+const DEFAULT_BASE = "satellite";
 
 // Resolve which repo a user's data lives in.
 // Checks satproto_root.json at the domain root first (in case the user has a
 // custom repo name or an unrelated project called "satellite"), then falls
 // back to the default /satellite/ path.
 async function resolveBase(domain) {
-  const resp = await fetch(`https://${domain}/satproto_root.json`);
-  if (resp.ok) {
-    const data = await resp.json();
-    if (data.sat_root) return data.sat_root;
+  try {
+    const resp = await fetch(`https://${domain}/satproto_root.json`);
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.sat_root) return data.sat_root;
+    }
+  } catch {
+    // not found or network error — fall through to default
   }
   return DEFAULT_BASE;
 }
@@ -84,7 +88,7 @@ export async function fetchSinglePost(domain, postId, myDomain, mySecret) {
 }
 
 export function mergeFeed(postArrays) {
-  return postArrays.flat().sort((a, b) =>
-    b.created_at.localeCompare(a.created_at)
-  );
+  return postArrays
+    .flat()
+    .sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
