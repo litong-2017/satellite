@@ -10,7 +10,7 @@ const DEFAULT_BASE = "satellite";
 // back to the default /satellite/ path.
 async function resolveBase(domain) {
   try {
-    const resp = await fetch(`https://${domain}/satproto_root.json`);
+    const resp = await fetch(`https://${domain}/${base}/satproto_root.json`);
     if (resp.ok) {
       const data = await resp.json();
       if (data.sat_root) return data.sat_root;
